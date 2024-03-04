@@ -37,7 +37,7 @@ class Fetch extends HTMLElement {
     }
 
     async fetchData() {
-        const response = await fetch(`https://narutodb.xyz/api/${this.element}?page=${this.pagination}&${this.perPage}=20`);
+        const response = await fetch(`https://narutodb.xyz/api/${this.element}?page=${this.pagination}&limit=${this.perPage}`);
         const data = await response.json();
         return data;
     }
@@ -49,11 +49,14 @@ class Fetch extends HTMLElement {
         const fixDivision = data[maxAttr] % this.perPage === 0 ? division : Math.ceil(division);
         this.maxPagination = fixDivision;
 
-        this.innerHTML = `<section class="container mx-auto p-6 font-sans">
-                            <h3>These are all the ${this.element} from the API:</h3>
+        this.innerHTML = `<section class="block container mx-auto p-6 font-sans ">
+                            <h3 class="text-3xl font-bold text-gray-900 text-center mb-3">List of ${this.element}s</h3>
                             ${this.printAllData(data)}
-                            <button id="previous" class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed" ${this.pagination == 1 ? "disabled" : ""}>Previous</button>
-                            <button id="next" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed" ${this.pagination == this.maxPagination ? "disabled" : ""}>Next</button>
+                            <div class="flex justify-center gap-2 mt-4">
+                                <button id="previous" class="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed" ${this.pagination == 1 ? "disabled" : ""}>Previous</button>
+                                <button id="current" class="bg-white  text-black font-bold py-2 px-4 rounded disabled:opacity-50 " disabled>Page ${this.pagination} of ${this.maxPagination}</button>
+                                <button id="next" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed" ${this.pagination == this.maxPagination ? "disabled" : ""}>Next</button>
+                                </div>
                         </section>`;
                         
         const nextButton = this.querySelector("#next");
@@ -67,14 +70,13 @@ class Fetch extends HTMLElement {
 
     printAllData(data) {
         console.log(data);
-        let html = '<div class="flex flex-col flex-wrap align-center justify-center gap-4 w-[220px] ">';
-        (data)[this.element+'s'].forEach(element => {
+        let html = '<div class="flex flex-wrap gap-4 justify-center align-center ">';
+        data[this.element+'s'].forEach(element => {
             const imageHandler = !element.images ? "" : Object.keys(element?.images).length > 0 ? element?.images[0] : "https://placekitten.com/300/200";
-            html +=  '<div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 max-w-sm">';
-            html +=   !element.images ? "" : 
-            `<a href="#" ">
-                        <img class="rounded-t-lg w-full" src="${imageHandler}" alt="" />
-                    </a>`;
+            html += '<div class="bg-gray-800 border border-gray-800 text-gray-200 rounded-lg shadow  w-[250px]">';
+            html += !element.images ? "" : `<a href="#" class="">
+                                                <img class="rounded-t-lg w-full h-[150px]" src="${imageHandler}" alt="" />
+                                            </a>`;
             html += `<div class="p-5">`;
             for (let key in element) {
                 switch (key) {
