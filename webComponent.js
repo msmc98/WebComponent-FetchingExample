@@ -69,7 +69,6 @@ class Fetch extends HTMLElement {
 
 
     printAllData(data) {
-        console.log(data);
         let html = '<div class="flex flex-wrap gap-4 justify-center align-center ">';
         data[this.element+'s'].forEach(element => {
             const imageHandler = !element.images ? "" : Object.keys(element?.images).length > 0 ? element?.images[0] : "https://placekitten.com/300/200";
@@ -105,9 +104,7 @@ class Fetch extends HTMLElement {
         return html + '</div>';
     }
 
-    handlingPagination(boolean) {
-        console.log('handlingPagination called');
-    
+    handlingPagination(boolean) {    
         if (boolean) {
             if (this.pagination < this.maxPagination) {
                 this.pagination++;
@@ -119,7 +116,6 @@ class Fetch extends HTMLElement {
                 this.updateData();
             }
         }
-        console.log(this.pagination);
     }
 
 }
