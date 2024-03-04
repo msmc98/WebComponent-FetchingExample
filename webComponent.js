@@ -2,7 +2,7 @@ class Fetch extends HTMLElement {
     constructor() {
         super();
         this.element;
-        this.pagination;
+        this.pagination = 1;
         this.maxPagination;
         this.perPage = 20;
         this.key;
@@ -71,10 +71,16 @@ class Fetch extends HTMLElement {
     printAllData(data) {
         let html = '<div class="flex flex-wrap gap-4 justify-center align-center ">';
         data[this.element+'s'].forEach(element => {
-            const imageHandler = !element.images ? "" : Object.keys(element?.images).length > 0 ? element?.images[0] : "https://placekitten.com/300/200";
             html += '<div class="bg-gray-800 border border-gray-800 text-gray-200 rounded-lg shadow  w-[250px]">';
+            const imageHandler = !element.images ? "" : Object.keys(element?.images).length > 0 ? element?.images[0] : "https://placekitten.com/300/200";
+
+            const img = new Image();
+            img.src = imageHandler;
+            console.log(img.height);
+
+            const imgProperties = img.width < 200 ? "object-contain" : "object-cover";
             html += !element.images ? "" : `<a href="#" class="">
-                                                <img class="rounded-t-lg w-full h-[150px]" src="${imageHandler}" alt="" />
+                                                <img class="rounded-t-lg w-full h-[150px] ${imgProperties} aspect-w-16 aspect-h-9" src="${imageHandler}" alt="${element.name}">
                                             </a>`;
             html += `<div class="p-5">`;
             for (let key in element) {
